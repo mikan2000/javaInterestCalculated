@@ -124,6 +124,30 @@ public final class RepaymentCalculator {
 	}
 	
 	/**
+	 * 到期一次性还款
+	 * @param amount
+	 * @param period
+	 * @param rate
+	 * @param repaymentType
+	 * @return
+	 */
+	private Repayment calculateOnceOnTime(BigDecimal amount, int period, BigDecimal rate){
+		
+		BigDecimal periodTime = new BigDecimal(period);
+		BigDecimal totalMoney = amount.multiply(rate).multiply(periodTime).add(amount);//本息
+		BigDecimal interest = amount.multiply(rate).multiply(periodTime);// 利息
+		
+		Repayment repayment = new Repayment();
+		repayment.setSequence(1);
+		repayment.setPrinciple(amount.setScale(2,BigDecimal.ROUND_HALF_UP));
+		repayment.setRate(totalRate.setScale(2,BigDecimal.ROUND_HALF_UP));
+		repayment.setInterest(interest.setScale(2,BigDecimal.ROUND_HALF_UP));
+		repayment.setTotalRepay(totalMoney.setScale(2,BigDecimal.ROUND_HALF_UP));
+		
+		return repayment;
+	}
+	
+	/**
 	 * 按月等额本金
 	 * @param amount
 	 * @param period
@@ -149,27 +173,4 @@ public final class RepaymentCalculator {
 		return null;
 	}
 	
-	/**
-	 * 到期一次性还款
-	 * @param amount
-	 * @param period
-	 * @param rate
-	 * @param repaymentType
-	 * @return
-	 */
-	private Repayment calculateOnceOnTime(BigDecimal amount, int period, BigDecimal rate){
-		
-		BigDecimal periodTime = new BigDecimal(period);
-		BigDecimal totalMoney = amount.multiply(rate).multiply(periodTime).add(amount);//本息
-		BigDecimal interest = amount.multiply(rate).multiply(periodTime);// 利息
-		
-		Repayment repayment = new Repayment();
-		repayment.setSequence(1);
-		repayment.setPrinciple(amount.setScale(2,BigDecimal.ROUND_HALF_UP));
-		repayment.setRate(totalRate.setScale(2,BigDecimal.ROUND_HALF_UP));
-		repayment.setInterest(interest.setScale(2,BigDecimal.ROUND_HALF_UP));
-		repayment.setTotalRepay(totalMoney.setScale(2,BigDecimal.ROUND_HALF_UP));
-		
-		return repayment;
-	}
 }
